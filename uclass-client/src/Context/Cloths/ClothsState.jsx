@@ -1,27 +1,32 @@
 import React, { useReducer } from 'react'
 import ClothsContext from './ClothsContext'
 import ClothsReducer from './ClothsReducer'
+import axiosClient from '../../config/axios'
 
 const ClothsState = (props) => {
     const initialState = {
-        cloths: [
-            {
-                id: 0,
-                name: 'Polera deportiva Under Armor',
-                price: 9990,
-                description: 'Polera de algodón sin mangas ideal para actividades deportivas',
-                item: 'Polera',
-                size: 'M'
-            }
-        ]
+        cloths: []
     }
 
     const [globalState, dispatch] = useReducer(ClothsReducer, initialState)
 
+    const getCloths = async () => {
+        try {
+            const res = await axiosClient.get('/cloth/get-all-clothes')
+            dispatch({
+                type: "OBTENER_PRENDAS",
+                payload: res.data.cloths
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <ClothsContext.Provider
             value={{
-                cloths: globalState.cloths
+                cloths: globalState.cloths,
+                getCloths
             }}
         >
             {props.children}
