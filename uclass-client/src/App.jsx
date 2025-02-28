@@ -8,6 +8,8 @@ import Register from './components/Register/Register'
 import Login from './components/Login/Login'
 import ClothList from './components/Cloths/ClothList'
 import UserState from './Context/Users/UserState'
+import Category from './components/Cloths/Category'
+import Footer from './components/Footer/Footer'
 
 function App() {
 
@@ -25,7 +27,9 @@ function App() {
             { /*RUTAS PÚBLICAS */}
             <Route path='/' element={<Home />} />
             <Route path='/catalogo-de-productos' element={<ClothList />} />
+            <Route path='/categoria' element={<Category />} />
           </Routes>
+          <Footer />
         </Router>
       </ClothsState>
     </UserState>

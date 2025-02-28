@@ -17,7 +17,8 @@ import { Link } from 'react-router-dom'
 
 const pages = [
   { name: 'HOME', path: '/' },
-  { name: 'CATALOGO', path: '/catalogo-de-productos' }
+  { name: 'CATALOGO', path: '/catalogo-de-productos' },
+  { name: 'CATEGORIAS', path: '/categoria'}
 ];
 
 const settings = [
@@ -47,10 +48,10 @@ function Header() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#121212' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Avatar alt='logo-principal' src='/logo.png' sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -66,7 +67,7 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            STRONG MACHINE
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -103,7 +104,7 @@ function Header() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Avatar alt='logo-principal' src='/logo.png' sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -120,7 +121,7 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            STRONG MACHINE
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
