@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 const Category = () => {
 
@@ -25,7 +26,7 @@ const Category = () => {
                 <img src={category.image} alt={category.name} />
               </div>
               <h3>{category.name}</h3>
-              <a href={`/categoria/${category.name.toLowerCase()}`} className="category-link">
+              <a component={Link} to={`/categoria/${category.name.toLowerCase()}`} className="category-link">
                 Ver productos
               </a>
             </div>

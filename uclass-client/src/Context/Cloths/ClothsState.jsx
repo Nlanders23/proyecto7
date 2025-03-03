@@ -23,10 +23,10 @@ const ClothsState = (props) => {
         try {
             const res = await axiosClient.get('/cloth/get-all-clothes')
             console.log("API Response:", res.data)
-            if (res.data && res.data.clothes && Array.isArray(res.data.cloths)) {
+            if (res.data && res.data.data && res.data.data.clothes && Array.isArray(res.data.data.clothes)) {
                 dispatch({
                     type: "OBTENER_PRENDAS",
-                    payload: res.data.clothes
+                    payload: res.data.data.clothes
                 })
             } else {
                 console.error("Invalid response format:", res.data)
@@ -35,6 +35,7 @@ const ClothsState = (props) => {
             console.error("Error fetching clothes:", error)
         }
     }
+
 
     const getCloth = async (id) => {
         try {

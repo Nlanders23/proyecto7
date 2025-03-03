@@ -10,6 +10,8 @@ import ClothList from './components/Cloths/ClothList'
 import UserState from './Context/Users/UserState'
 import Category from './components/Cloths/Category'
 import Footer from './components/Footer/Footer'
+import ClothSingle from './components/Cloths/ClothSingle'
+import DetailCategory from './components/Cloths/DetailCategory'
 
 function App() {
 
@@ -28,6 +30,9 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/catalogo-de-productos' element={<ClothList />} />
             <Route path='/categoria' element={<Category />} />
+            <Route path='/catalogo-de-productos/:name' element={<ClothSingle />}/>
+            <Route path='/categoria/:category' element={<DetailCategory />}/>
+            <Route path='/categoria/:category/:name' element={<ClothSingle />}/>
           </Routes>
           <Footer />
         </Router>
