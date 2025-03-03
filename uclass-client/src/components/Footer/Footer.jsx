@@ -58,7 +58,7 @@ const Footer = () => {
                     {/* Columna 1: Información de la empresa */}
                     <Grid2 item xs={12} md={4}>
                         <Typography variant="h5" fontWeight="bold" gutterBottom color='white'>
-                            Stronge Machine
+                            Strong Machine
                         </Typography>
                         <Typography variant="body2" color="white" sx={{ mb: 3 }}>
                             Tu tienda online de confianza para encontrar las mejores prendas deportivas
@@ -163,14 +163,14 @@ const Footer = () => {
 
                     {/* Métodos de pago */}
                     <Grid2 item xs={12} md={6}>
-                        <Typography variant="h6" fontWeight="bold" gutterBottom>
+                        <Typography variant="h6" fontWeight="bold" gutterBottom color='white'>
                             Métodos de pago aceptados:
                         </Typography>
                         <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-                            <VisaIcon sx={{ fontSize: 36, color: 'text.secondary' }} />
-                            <MastercardIcon sx={{ fontSize: 36, color: 'text.secondary' }} />
-                            <AmexIcon sx={{ fontSize: 36, color: 'text.secondary' }} />
-                            <PaypalIcon sx={{ fontSize: 36, color: 'text.secondary' }} />
+                            <VisaIcon sx={{ fontSize: 36, color: 'white' }} />
+                            <MastercardIcon sx={{ fontSize: 36, color: 'white' }} />
+                            <AmexIcon sx={{ fontSize: 36, color: 'white' }} />
+                            <PaypalIcon sx={{ fontSize: 36, color: 'white' }} />
                         </Stack>
                     </Grid2>
                 </Grid2>
@@ -179,8 +179,8 @@ const Footer = () => {
 
                 {/* Copyright */}
                 <Box textAlign="center">
-                    <Typography variant="body2" color="text.secondary">
-                        &copy; {currentYear} Stronge Machine. Todos los derechos reservados.
+                    <Typography variant="body2" color="white">
+                        &copy; {currentYear} Strong Machine. Todos los derechos reservados.
                     </Typography>
                     <Box mt={1}>
                         <Link href="#" color="text.secondary" sx={{ mx: 1, '&:hover': { color: 'common.white' } }}>

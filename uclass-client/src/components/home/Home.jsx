@@ -92,7 +92,7 @@ const Home = () => {
       id: 1,
       name: 'Zapatillas Running Pro',
       price: 129990,
-      image: '/images/product1.jpg',
+      image: '/zapatillas-running-pro.png',
       category: 'running'
     },
     {

@@ -5,7 +5,16 @@ import axiosClient from '../../config/axios'
 
 const ClothsState = (props) => {
     const initialState = {
-        cloths: []
+        clothes: [],
+        currentCloth: {
+            _id: null,
+            name: "",
+            price: "",
+            description: "",
+            size: "",
+            image: "",
+            category: ""
+        }
     }
 
     const [globalState, dispatch] = useReducer(ClothsReducer, initialState)
@@ -13,9 +22,26 @@ const ClothsState = (props) => {
     const getCloths = async () => {
         try {
             const res = await axiosClient.get('/cloth/get-all-clothes')
+            console.log("API Response:", res.data)
+            if (res.data && res.data.cloths && Array.isArray(res.data.cloths)) {
+                dispatch({
+                    type: "OBTENER_PRENDAS",
+                    payload: res.data.cloths
+                })
+            } else {
+                console.error("Invalid response format:", res.data)
+            }
+        } catch (error) {
+            console.error("Error fetching clothes:", error)
+        }
+    }
+
+    const getCloth = async (id) => {
+        try {
+            const res = await axiosClient.get(`/cloth/get-cloth/${id}`)
             dispatch({
-                type: "OBTENER_PRENDAS",
-                payload: res.data.cloths
+                type: "OBTENER_PRENDA",
+                payload: res.data.clothes
             })
         } catch (error) {
             console.log(error)
@@ -25,8 +51,10 @@ const ClothsState = (props) => {
     return (
         <ClothsContext.Provider
             value={{
-                cloths: globalState.cloths,
-                getCloths
+                clothes: globalState.clothes,
+                currentCloth: globalState.currentCloth,
+                getCloths,
+                getCloth
             }}
         >
             {props.children}

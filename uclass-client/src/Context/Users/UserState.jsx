@@ -31,12 +31,15 @@ const UserState = (props) => {
     const loginUser = async (formData) => {
         try {
             const res = await axiosClient.post('/user/login', formData);
+            const token = res.data.token;
             dispatch({
                 type: "LOGIN_EXITOSO",
                 payload: token
             })
+            return res;
         } catch (error) {
             console.log(error)
+            return error.response;
         }
     }
 

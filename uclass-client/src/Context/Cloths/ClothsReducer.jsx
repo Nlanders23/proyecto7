@@ -5,6 +5,11 @@ const reducer = (globalState, action) => {
                 ...globalState,
                 cloths: action.payload
             }
+        case "OBTENER_PRENDA":
+            return {
+                ...globalState,
+                currentCloth: action.payload
+            }
         default:
             return globalState
     }
