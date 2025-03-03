@@ -3,7 +3,7 @@ const reducer = (globalState, action) => {
         case "OBTENER_PRENDAS":
             return {
                 ...globalState,
-                cloths: action.payload
+                clothes: action.payload
             }
         case "OBTENER_PRENDA":
             return {

@@ -26,13 +26,13 @@ const ClothList = () => {
   
   if (loading) return <p>Cargando prendas...</p>;
   if (error) return <p>{error}</p>;
-  if (!cloths || cloths.length === 0) return <p>No hay prendas disponibles.</p>;
+  if (!clothes || clothes.length === 0) return <p>No hay prendas disponibles.</p>;
 
   return (
     <div className="cloth-list-container">
       <h1>Catalogo de Prendas</h1>
       <div className="cloth-grid">
-        {cloths.map(cloth => (
+        {clothes.map(cloth => (
           <div key={cloth._id} className="cloth-card">
             <h2>{cloth.name}</h2>
             <p>Precio: ${cloth.price}</p>

@@ -23,10 +23,10 @@ const ClothsState = (props) => {
         try {
             const res = await axiosClient.get('/cloth/get-all-clothes')
             console.log("API Response:", res.data)
-            if (res.data && res.data.cloths && Array.isArray(res.data.cloths)) {
+            if (res.data && res.data.clothes && Array.isArray(res.data.cloths)) {
                 dispatch({
                     type: "OBTENER_PRENDAS",
-                    payload: res.data.cloths
+                    payload: res.data.clothes
                 })
             } else {
                 console.error("Invalid response format:", res.data)
