@@ -87,36 +87,7 @@ const Home = () => {
     navigate('/catalogo-de-productos')
   }
 
-  const featuredProducts = [
-    {
-      id: 1,
-      name: 'Zapatillas Running Pro',
-      price: 129990,
-      image: '/zapatillas-running-pro.png',
-      category: 'running'
-    },
-    {
-      id: 2,
-      name: 'Camiseta Técnica UltraLight',
-      price: 25990,
-      image: '/images/product2.jpg',
-      category: 'fitness'
-    },
-    {
-      id: 3,
-      name: 'Shorts de entrenamiento FlexFit',
-      price: 14990,
-      image: '/images/product3.jpg',
-      category: 'training'
-    },
-    {
-      id: 4,
-      name: 'Chaqueta Impermeable OutdoorPro',
-      price: 89990,
-      image: '/images/product4.jpg',
-      category: 'outdoor'
-    }
-  ];
+  
   
   return (
     <>
@@ -149,47 +120,6 @@ const Home = () => {
           ))}
         </div>
       </div>
-
-      {/* Productos destacados */}
-      <section className="featured-products">
-        <div className="section-title">
-          <h2>PRODUCTOS DESTACADOS</h2>
-          <p>Las mejores opciones seleccionadas para ti</p>
-        </div>
-        
-        <div className="products-grid">
-          {featuredProducts.map(product => (
-            <div key={product.id} className="product-card">
-              <div className="product-badge">Destacado</div>
-              <div className="product-image">
-                <img src={product.image} alt={product.name} />
-              </div>
-              <div className="product-info">
-                <h3>{product.name}</h3>
-                <p className="product-category">{product.category}</p>
-                <p className="product-price">${product.price.toFixed(2)}</p>
-              </div>
-              <div className="product-actions">
-                <button className="add-to-cart">Añadir al carrito</button>
-                <button className="quick-view">Vista rápida</button>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        <div className="view-all-container">
-          <a href="/products" className="view-all-btn">Ver todos los productos</a>
-        </div>
-      </section>
-
-      {/* Banner promocional */}
-      <section className="promo-banner">
-        <div className="promo-content">
-          <h2>HASTA 40% DE DESCUENTO</h2>
-          <p>En nuestra nueva colección de verano</p>
-          <button className="promo-btn">Ver ofertas</button>
-        </div>
-      </section>
     </div>
     </>
   )

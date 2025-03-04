@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useContext } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,8 +12,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import UserContext from '../../Context/Users/UserContext';
 
 
 const pages = [
@@ -21,16 +22,12 @@ const pages = [
   { name: 'CATEGORIAS', path: '/categoria'}
 ];
 
-const settings = [
-  {name: 'PERFIL', path: '/perfil'},
-  {name: 'INICIAR SESION', path: '/iniciar-sesion'},
-  {name: 'REGISTRARME', path: '/registro'},
-  {name: 'CERRAR SESION', path: '/'}
-];
 
-function Header() {
+
+const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -47,16 +44,30 @@ function Header() {
     setAnchorElUser(null);
   };
 
+  const ctx = useContext(UserContext);
+
+  const {logout, user} = ctx
+
+  const settings = [
+    {name: 'PERFIL', path: '/perfil'},
+    {name: 'INICIAR SESION', path: '/iniciar-sesion'},
+    {name: 'REGISTRARME', path: '/registro'},
+    {name: 'CERRAR SESION', onclick: () => {
+      logout();
+      navigate('/');
+    }}
+  ];
+
   return (
     <AppBar position="static" sx={{ backgroundColor: '#121212' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Avatar alt='logo-principal' src='/logo.png' sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Avatar alt="logo-principal" src="/logo.png" sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
             component={Link}
-            to='/'
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -104,12 +115,12 @@ function Header() {
               ))}
             </Menu>
           </Box>
-          <Avatar alt='logo-principal' src='/logo.png' sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Avatar alt="logo-principal" src="/logo.png" sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
             component={Link}
-            to='/'
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -159,9 +170,15 @@ function Header() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem component={Link} to={setting.path} key={setting.name} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
-                </MenuItem>
+                setting.onClick ? (
+                  <MenuItem key={setting.name} onClick={setting.onClick}>
+                    <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
+                  </MenuItem>
+                ) : (
+                  <MenuItem component={Link} to={setting.path} key={setting.name} onClick={handleCloseUserMenu}>
+                    <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
+                  </MenuItem>
+                )
               ))}
             </Menu>
           </Box>
