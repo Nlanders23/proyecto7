@@ -90,6 +90,10 @@ const ClothSingle = () => {
             </Typography>
           )}
 
+          <Typography variant='body1' sx={{ color: '#333', marginBottom: '20px' }}>
+            <strong>Categoria:</strong> {cloth.category}
+          </Typography>
+
           <Button
             variant="contained"
             color="primary"

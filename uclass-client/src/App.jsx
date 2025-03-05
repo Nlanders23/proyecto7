@@ -12,6 +12,7 @@ import Category from './components/Cloths/Category'
 import Footer from './components/Footer/Footer'
 import ClothSingle from './components/Cloths/ClothSingle'
 import DetailCategory from './components/Cloths/DetailCategory'
+import Checkout from './components/Checkout/Checkout'
 
 function App() {
 
@@ -21,8 +22,9 @@ function App() {
         <Router>
           <Header />
           <Routes>
-            {/* {RUTA PRIVADA} */}
+            {/* {RUTAS PRIVADAS} */}
             <Route path='/perfil' element={<Profile />} />
+            <Route path='/carrito' element={<Checkout />} />
             {/* {RUTAS DE AUTENTICACIÓN} */}
             <Route path='/registro' element={<Register />} />
             <Route path='/iniciar-sesion' element={<Login />} />
