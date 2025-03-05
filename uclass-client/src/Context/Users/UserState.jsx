@@ -47,7 +47,7 @@ const UserState = (props) => {
         const token = localStorage.getItem('token');
 
         if(token) {
-            axiosClient.defaults.headers.common['Authorization'] = 'Bearer' + token
+            axiosClient.defaults.headers.common['Authorization'] = 'Bearer ' + token
         } else {
             delete axiosClient.defaults.headers.common['Authorization'] 
         }

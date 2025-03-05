@@ -1,7 +1,7 @@
 import { Box, Button, Chip, Container, Divider, Grid2, Typography } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const ClothSingle = () => {
   const location = useLocation();
@@ -12,6 +12,11 @@ const ClothSingle = () => {
       currency: 'CLP',
     }).format(price);
   };
+
+  const navigate = useNavigate();
+  const handleClick =() => {
+    navigate('/carrito')
+  }
 
   return (
     <Container maxWidth="lg" className='detalles' sx={{ padding: '80px 20px', backgroundColor: '#dce3f1' }}>
@@ -100,6 +105,7 @@ const ClothSingle = () => {
             size="large"
             sx={{ marginTop: '20px', width: '100%' }}
             startIcon={<ShoppingCartIcon />}
+            onClick={handleClick}
           >
             Añadir al Carrito
           </Button>

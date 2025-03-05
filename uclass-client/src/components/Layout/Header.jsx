@@ -52,7 +52,7 @@ const Header = () => {
     {name: 'PERFIL', path: '/perfil'},
     {name: 'INICIAR SESION', path: '/iniciar-sesion'},
     {name: 'REGISTRARME', path: '/registro'},
-    {name: 'CERRAR SESION', onclick: () => {
+    {name: 'CERRAR SESION', onClick: () => {
       logout();
       navigate('/');
     }}

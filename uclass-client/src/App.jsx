@@ -13,6 +13,8 @@ import Footer from './components/Footer/Footer'
 import ClothSingle from './components/Cloths/ClothSingle'
 import DetailCategory from './components/Cloths/DetailCategory'
 import Checkout from './components/Checkout/Checkout'
+import PrivateRoute from './routes/PrivateRoute'
+import AuthRute from './routes/AuthRute'
 
 function App() {
 
@@ -23,11 +25,29 @@ function App() {
           <Header />
           <Routes>
             {/* {RUTAS PRIVADAS} */}
-            <Route path='/perfil' element={<Profile />} />
-            <Route path='/carrito' element={<Checkout />} />
+            
+            <Route path='/perfil' element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+               }/>
+            <Route path='/carrito' element={
+              <PrivateRoute>
+                 <Checkout />
+              </PrivateRoute>
+             } />
+
             {/* {RUTAS DE AUTENTICACIÓN} */}
-            <Route path='/registro' element={<Register />} />
-            <Route path='/iniciar-sesion' element={<Login />} />
+            <Route path='/registro' element={
+              <AuthRute>
+                <Register />
+              </AuthRute>
+              } />
+            <Route path='/iniciar-sesion' element={
+              <AuthRute>
+                <Login />
+              </AuthRute>
+              } />
             { /*RUTAS PÚBLICAS */}
             <Route path='/' element={<Home />} />
             <Route path='/catalogo-de-productos' element={<ClothList />} />
