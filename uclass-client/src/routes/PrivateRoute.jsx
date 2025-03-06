@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import UserContext from '../Context/Users/UserContext'
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { Box, CircularProgress } from '@mui/material';
 
-const PrivateRoute = ({component: Component, ...rest}) => {
+const PrivateRoute = ({children}) => {
     const userCtx = useContext(UserContext);
     
     const {authStatus, verifyingToken} = userCtx
@@ -15,18 +16,18 @@ const PrivateRoute = ({component: Component, ...rest}) => {
             setLoading(false);
         };
         verify();
-    }, [verifyingToken])
+    }, [verifyingToken]);
 
-  return (
-    <Route 
-        {...rest}
-        element={
-            loading? null : authStatus ? (
-                <Component />
-            ) : (<Navigate to='/' replace />)
-        }
-     />
-  )
+    if(loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+              <CircularProgress />
+            </Box>
+          );
+    }
+
+  return authStatus ? children : <Navigate to="/iniciar-sesion" replace />;
+  
 }
 
 export default PrivateRoute

@@ -14,7 +14,7 @@ import ClothSingle from './components/Cloths/ClothSingle'
 import DetailCategory from './components/Cloths/DetailCategory'
 import Checkout from './components/Checkout/Checkout'
 import PrivateRoute from './routes/PrivateRoute'
-import AuthRute from './routes/AuthRute'
+import AuthRoute from './routes/AuthRoute'
 
 function App() {
 
@@ -39,14 +39,14 @@ function App() {
 
             {/* {RUTAS DE AUTENTICACIÓN} */}
             <Route path='/registro' element={
-              <AuthRute>
+              <AuthRoute>
                 <Register />
-              </AuthRute>
+              </AuthRoute>
               } />
             <Route path='/iniciar-sesion' element={
-              <AuthRute>
+              <AuthRoute>
                 <Login />
-              </AuthRute>
+              </AuthRoute>
               } />
             { /*RUTAS PÚBLICAS */}
             <Route path='/' element={<Home />} />
