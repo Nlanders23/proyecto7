@@ -58,8 +58,13 @@ const UserState = (props) => {
                 type: "OBTENER_USUARIO",
                 payload: res.data.user
             })
+            return true;
         } catch (error) {
-            console.log(error);
+            console.log('Verificación fallida', error);
+            dispatch({
+                type: 'VERIFICACION_FALLIDA'
+            })
+            return false;
         }
     }
 
@@ -69,6 +74,27 @@ const UserState = (props) => {
        }) 
     }
 
+    const editCart = (cartItems) => {
+        dispatch({
+            type: 'ACTUALIZAR_CARRITO',
+            payload: cartItems
+        })
+    }
+
+    const getCheckoutSession = async () => {
+        try {
+            const res = await axiosClient.post('/carts/create-order', { 
+                items: globalState.cart 
+            });
+            
+            dispatch({
+                type: "ESTABLECER_SESSION_URL",
+                payload: res.data.url
+            })
+        } catch (error) {
+            console.log("Error creating checkout session:", error);
+        }
+    }
   return (
     <UserContext.Provider value={{
         user: globalState.user,
@@ -77,7 +103,9 @@ const UserState = (props) => {
         registerUser,
         loginUser,
         verifyingToken,
-        logout
+        logout,
+        editCart,
+        getCheckoutSession
     }}>
         {props.children}
     </UserContext.Provider>

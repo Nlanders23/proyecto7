@@ -1,56 +1,90 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import UserContext from '../../Context/Users/UserContext'
 
 const Checkout = () => {
-    const userCtx = useContext(UserContext);
-    const {cart, sessionURL, getCheckoutSession, editCart} = userCtx;
-    const [total, setTotal] = useState(0);
+  const userCtx = useContext(UserContext);
+  const { cart = [], sessionURL, getCheckoutSession, editCart } = userCtx;
+  const [total, setTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    try {
       getCheckoutSession();
+    } catch (error) {
+      setError("Error al procesar el pago. Inténtalo de nuevo.");
+      console.error("Checkout error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
+
+  };
+
+  useEffect(() => {
+    if (sessionURL) window.location.href = sessionURL;
+  }, [sessionURL]);
+
+  useEffect(() => {
+    const reduceTotalFromOrder = () => {
+      if (!cart || cart.length === 0) return 0;
+
+      return cart.reduce((acc, cv) => {
+        const updateQuantity = (cv.price / 100) * cv.quantity;
+        return updateQuantity + acc;
+      }, 0);
     };
 
-    useEffect(() => {
-      if(sessionURL) window.location.href = sessionURL;
-    }, [sessionURL]);
+    const getOrderDetails = () => {
+      const total = reduceTotalFromOrder();
+      setTotal(total);
+    };
 
-    useEffect(() => {
-      const reduceTotalFromOrder = () => {
-        return cart.reduce((acc, cv) => {
-          const updateQuantity = (cv.price / 100) * cv.quantity;
-          return updateQuantity + acc;
-        }, 0);
-      };
+    getOrderDetails();
+  }, [cart]);
 
-      const getOrderDetails = () => {
-        const total = reduceTotalFromOrder();
-        setTotal(total);
-      };
-      
-      getOrderDetails();
-    }, [cart]);
+  const handleChange = (e) => {
+    if (!cart || cart.length === 0) return;
 
-    const handleChange = (e) => {
-      const updatedCart = cart.map((elt) => {
-        return elt.priceID === e.target.name
+    const updatedCart = cart.map((elt) => {
+      return elt.priceID === e.target.name
         ? {
-            ...elt,
-            quantity: parseInt(e.target.value)
-          }
-          : elt;
-      });
-      editCart(updatedCart);
-    };
+          ...elt,
+          quantity: parseInt(e.target.value)
+        }
+        : elt;
+    });
+    editCart(updatedCart);
+  };
 
-    const handleRemove = (e, currentPriceID)=> {
-      e.preventDefault();
-      const updatedCart = cart.filter((elt) => {
-        return elt.priceID !== currentPriceID;
-      });
-      editCart(updatedCart);
-    };
+  const handleRemove = (e, currentPriceID) => {
+    e.preventDefault();
+    if (!cart || cart.length === 0) return;
+
+    const updatedCart = cart.filter((elt) => {
+      return elt.priceID !== currentPriceID;
+    });
+    editCart(updatedCart);
+  };
+
+  if (!cart || cart.length === 0) {
+    return (
+      <div className="max-w-4xl mx-4 py-8 md:mx-auto text-center">
+        <h1 className="text-3xl font-bold mt-8">Carrito</h1>
+        <p className="mt-4">Tu carrito está vacío</p>
+        <div className="mt-4">
+          <Link to="/catalogo-de-productos" className="underline text-blue-500">
+            Explorar productos
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -61,7 +95,7 @@ const Checkout = () => {
           <ul>
             {cart.map((e) => {
               return (
-                <li key={e.id} className="flex py-10">
+                <li key={e.id || e.priceID} className="flex py-10">
                   <figure>
                     <img
                       src={e.img}
@@ -75,13 +109,13 @@ const Checkout = () => {
                       <div className="pr-6">
                         <h3 className="text-sm">
                           <Link
-                            to={`/pizzas/${e.slug}`}
+                            to={`/catalogo-de-productos/${e.slug || e.name}`}
                             className="underline font-medium"
                           >
                             {e.name}
                           </Link>
                         </h3>
-                        <p className="mt-1 text-sm text-gray-500">{e.size}</p>
+                        <p className="mt-1 text-sm text-gray-500">{e.size || 'Estándar'}</p>
                       </div>
 
                       <p className="text-sm font-medium text-gray-900 text-right">
@@ -91,7 +125,7 @@ const Checkout = () => {
 
                     <div className="mt-4 flex items-center sm:block sm:absolute sm:top-0 sm:left-1/2 sm:mt-0">
                       <select
-                        id="quantity-0"
+                        id={`quantity-${e.id || e.priceID}`}
                         name={e.priceID}
                         onChange={(e) => {
                           handleChange(e);
@@ -104,11 +138,11 @@ const Checkout = () => {
                             const initial = i + 1;
 
                             return initial === e.quantity ? (
-                              <option selected value={initial}>
+                              <option key={initial} selected value={initial}>
                                 {initial}
                               </option>
                             ) : (
-                              <option value={initial}>{initial}</option>
+                              <option key={initial} value={initial}>{initial}</option>
                             );
                           })}
                       </select>
@@ -139,14 +173,22 @@ const Checkout = () => {
               </dl>
             </div>
           </div>
+
+          {error && (
+            <div className="mt-4 p-3 bg-red-100 text-red-800 rounded">
+              {error}
+            </div>
+          )}
+
           <div className="mt-10">
             <button
               onClick={(e) => {
                 handleSubmit(e);
               }}
-              className="form-button"
+              disabled={isLoading}
+              className={`form-button ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
             >
-              Procesar pago
+              {isLoading ? 'Procesando...' : 'Procesar pago'}
             </button>
           </div>
         </form>
