@@ -45,28 +45,33 @@ const UserState = (props) => {
 
     const verifyingToken = async () => {
         const token = localStorage.getItem('token');
-
-        if(token) {
-            axiosClient.defaults.headers.common['Authorization'] = 'Bearer ' + token
-        } else {
-            delete axiosClient.defaults.headers.common['Authorization'] 
-        }
-
-        try {
-            const res = await axiosClient.get('/user/verify-token')
+        if (!token) {
+            console.log("Token no encontrado en localStorage");
             dispatch({
-                type: "OBTENER_USUARIO",
-                payload: res.data.user
-            })
-            return true;
-        } catch (error) {
-            console.log('Verificación fallida', error);
-            dispatch({
-                type: 'VERIFICACION_FALLIDA'
-            })
-            return false;
+                type: "VERIFICACION_FALLIDA"
+            });
+            return false;  
         }
-    }
+            
+            try {
+                axiosClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                
+                const res = await axiosClient.get('/user/verify-token');
+                console.log("Token verificado");
+                dispatch({
+                    type: "OBTENER_USUARIO",
+                    payload: res.data.user
+                });
+                return true;
+            } catch (error) {
+                delete axiosClient.defaults.headers.common['Authorization'];
+                console.log("Verificación de token fallida:", error.message || error);
+                dispatch({
+                    type: "VERIFICACION_FALLIDA"
+                });
+                return false;
+            }
+        }
 
     const logout = () => { 
        dispatch({

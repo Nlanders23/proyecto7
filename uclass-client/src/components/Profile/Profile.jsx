@@ -8,23 +8,38 @@ const Profile = () => {
   const userCtx = useContext(UserContext);
   const { user, authStatus, verifyingToken } = userCtx;
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
-      setLoading(true);
-      console.log('Verificando  autenticación')
-      const authResult = await verifyingToken();
-      console.log("Resultado de la verificación", authResult);
-      console.log('Actual verificación', userCtx.authStatus);
-      await verifyingToken();
+      try {
+        setLoading(true);
+       console.log('Verificando  autenticación')
+      
+      
+       if(authStatus) {
+         console.log('Estas Autenticado')
+         setLoading(false);
+         return;
+       }
 
-      if (!authStatus && !userCtx.authStatus) {
-        console.log('usuario no autenticado, redireccionando a login')
-        navigate('/iniciar-sesión');
+       const authResult = await verifyingToken();
+       console.log("Resultado de la verificación", authResult);
+      
+
+       if (!authStatus) {
+         console.log('usuario no autenticado, redireccionando a login')
+         setAuthError(true);
+         navigate('/iniciar-sesión');
+        }
+      } catch (error) {
+        console.error('Error durante la autenticación', error);
+        setAuthError(true)
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-      console.log('Autenticación completada')
-    };
+        
+   };
     checkAuth();
   }, []);
 
@@ -36,15 +51,45 @@ const Profile = () => {
       </Box>
     );
   }
-  if (!authStatus === false && !loading){
-    return null;
-  } 
-  
-  if (authStatus === null && !loading) {
+
+  if (authError || authStatus === false) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-        <Typography variant="h6" color="error">Error de autenticación. <Button onClick={() => navigate('/iniciar-sesion')}>Iniciar sesión</Button></Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <Typography variant="h6" color="error" gutterBottom>
+          Error de autenticación
+        </Typography>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={() => navigate('/iniciar-sesion')}
+          sx={{ mt: 2 }}
+        >
+          Iniciar sesión
+        </Button>
       </Box>
+    );
+  }
+
+  if (authStatus && (!user || !user.username)) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4, backgroundColor: '#dce3f1', minHeight: '80vh' }}>
+        <Grid2 container spacing={3}>
+          <Grid2 item xs={12} md={4}>
+            <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Typography variant="h6" color="text.secondary">
+                Información de usuario no disponible
+              </Typography>
+              <Button 
+                variant="contained" 
+                onClick={() => window.location.reload()}
+                sx={{ mt: 2 }}
+              >
+                Recargar página
+              </Button>
+            </Paper>
+          </Grid2>
+        </Grid2>
+      </Container>
     );
   }
 
