@@ -1,11 +1,21 @@
 import { Box, Button, Chip, Container, Divider, Grid2, Typography } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import UserContext from '../../Context/Users/UserContext';
 
 const ClothSingle = () => {
   const location = useLocation();
   const cloth = location.state?.cloth;
+  const navigate = useNavigate();
+  const userCtx = useContext(UserContext);
+  const {editCart, cart = [] } = userCtx;
+
+  useEffect(() => {
+    console.log("UserContext in ClothSingle:", userCtx);
+    console.log("Current cloth:", cloth);
+  }, [userCtx, cloth]);
+
   const formatCLP = (price) => {
     return new Intl.NumberFormat('es-CL', {
       style: 'currency',
@@ -13,10 +23,48 @@ const ClothSingle = () => {
     }).format(price);
   };
 
-  const navigate = useNavigate();
-  const handleClick =() => {
+  const handleAddToCart = () => {
+    console.log('Añadir al carro:', cloth)
+    if (!userCtx || !userCtx.editCart) {
+      console.error("editCart function not available in UserContext");
+      return;
+    }
+    
+    const cart = userCtx.cart || [];
+    console.log("Current cart before adding:", cart);
+    
+    const existingItem = cart.find(item => item.id === cloth._id);
+
+    if(existingItem) {
+      console.log("Item exists in cart, updating quantity");
+      const updatedCart = cart.map(item => 
+        item.id === cloth._id 
+        ? { ...item, quantity: item.quantity +1 }
+        : item
+      );
+      userCtx.editCart(updatedCart);
+      console.log('Actualizar carro:', updatedCart)
+    } else {
+      const newItem = {
+        id: cloth._id,
+        priceID: cloth._id,
+        name: cloth.name,
+        price: cloth.price,
+        img: cloth.img && cloth.img.length > 0 ? cloth.img[0] : '',
+        size: cloth.size && cloth.sizes.length > 0
+        ? cloth.sizes.map(s => s.name).join(',')
+        : 'Talla única',
+        quantity: 1,
+        slug: cloth.name.toLowerCase().replace(/ /g, '-')
+      };
+      const newCart = [...cart, newItem];
+      userCtx.editCart(newCart);
+      console.log("New cart:", newCart);
+    }
+
     navigate('/carrito')
   }
+  
 
   return (
     <Container maxWidth="lg" className='detalles' sx={{ padding: '80px 20px', backgroundColor: '#dce3f1' }}>
@@ -75,10 +123,10 @@ const ClothSingle = () => {
                 Tallas Disponibles:
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '20px' }}>
-                {cloth.sizes.map((size, index) => (
+                {cloth.sizes.map((sizeObj, index) => (
                   <Chip
                     key={index}
-                    label={size.size}
+                    label={sizeObj.size}
                     variant="outlined"
                     sx={{
                       borderColor: '#1976d2',
@@ -91,12 +139,12 @@ const ClothSingle = () => {
             </>
           ) : (
             <Typography variant='body1' sx={{ color: '#333', marginBottom: '20px' }}>
-              <strong>Tallas:</strong> {cloth.size}
+              <strong>Tallas:</strong> {cloth.size || 'Talla única'}
             </Typography>
           )}
 
           <Typography variant='body1' sx={{ color: '#333', marginBottom: '20px' }}>
-            <strong>Categoria:</strong> {cloth.category}
+            <strong>Categoria:</strong> {cloth.category || 'General'}
           </Typography>
 
           <Button
@@ -105,7 +153,7 @@ const ClothSingle = () => {
             size="large"
             sx={{ marginTop: '20px', width: '100%' }}
             startIcon={<ShoppingCartIcon />}
-            onClick={handleClick}
+            onClick={handleAddToCart}
           >
             Añadir al Carrito
           </Button>

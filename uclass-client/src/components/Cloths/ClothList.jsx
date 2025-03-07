@@ -41,7 +41,7 @@ const ClothList = () => {
   }
   if (error) return <p>{error}</p>;
   if (!clothes || clothes.length === 0) return <p>No hay prendas disponibles.</p>;
-  
+
   const formatCLP = (price) => {
     return new Intl.NumberFormat('es-CL', {
       style: 'currency',
@@ -50,7 +50,7 @@ const ClothList = () => {
   };
 
   return (
-    <Grid2 sx={{backgroundColor:' #dce3f1'}}>
+    <Grid2 sx={{ backgroundColor: ' #dce3f1' }}>
       <Typography gutterBottom variant='h4'>Catalogo de Prendas</Typography>
       <Grid2 container spacing={2} sx={{ padding: '20px', backgroundColor: ' #dce3f1' }}>
         {clothes.map((cloth) => (
@@ -70,15 +70,15 @@ const ClothList = () => {
                     sx={{ objectFit: 'cover', transition: 'transform 0.5s', '&:hover': { transform: 'scale(1.1)' } }}
                   />)}
                 <CardContent sx={{ padding: '20px 20px 10px' }}>
-                <Typography gutterBottom variant='h6' sx={{ fontSize: '18px', fontWeight: 600, marginBottom: '10px', color: '#333' }}>
+                  <Typography gutterBottom variant='h6' sx={{ fontSize: '18px', fontWeight: 600, marginBottom: '10px', color: '#333' }}>
                     {cloth.name}
                   </Typography>
                   <Typography gutterBottom variant='h10' sx={{ fontSize: '20px', fontWeight: 700, color: '#ff5722', marginBottom: '15px' }}>
                     Precio: {formatCLP(cloth.price)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', fontWeight: 'bold', '&:hover': { textDecoration: 'underline' } }}>
-                  Ver producto
-                </Typography>
+                    Ver producto
+                  </Typography>
                 </CardContent>
               </CardActionArea>
             </Card>

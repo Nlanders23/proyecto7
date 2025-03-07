@@ -4,14 +4,26 @@ import UserContext from './UserContext';
 import UserReducer from './UserReducer';
 
 const UserState = (props) => {
+    const savedCart = localStorage.getItem('cart');
+    let parsedCart = [];
+    
+    try {
+        parsedCart = savedCart ? JSON.parse(savedCart) : [];
+    } catch (e) {
+        console.error("Error parsing cart from localStorage:", e);
+    }
+
     const initialState = {
         user: {
             username: null,
             email: null,
         },
         authStatus: false,
-        loading: true
+        loading: true,
+        cart: parsedCart,
+        sessionURL: null
     }
+    console.log("Initial state in UserState:", initialState);
 
     const [globalState, dispatch] = useReducer(UserReducer, initialState);
 
@@ -80,6 +92,12 @@ const UserState = (props) => {
     }
 
     const editCart = (cartItems) => {
+        console.log("editCart called with:", cartItems);
+        try {
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+        } catch (e) {
+            console.error("Error saving cart to localStorage:", e);
+        }
         dispatch({
             type: 'ACTUALIZAR_CARRITO',
             payload: cartItems
@@ -105,6 +123,8 @@ const UserState = (props) => {
         user: globalState.user,
         authStatus: globalState.authStatus,
         loading: globalState.loading,
+        cart: globalState.cart,
+        sessionURL: globalState.sessionURL,
         registerUser,
         loginUser,
         verifyingToken,

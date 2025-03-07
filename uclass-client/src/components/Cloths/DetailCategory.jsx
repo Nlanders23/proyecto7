@@ -28,7 +28,7 @@ const DetailCategory = () => {
                     await getCloths()
                 }
                 const filtered = clothes.filter(cloth =>
-                    cloth.category.toLowerCase() === category.toLowerCase()
+                    (cloth.category || '').toLowerCase() === category.toLowerCase()
                 )
 
                 setFilteredCloths(filtered)

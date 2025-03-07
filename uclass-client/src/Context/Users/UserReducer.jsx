@@ -35,11 +35,12 @@ const UserReducer = (globalState, action) => {
                 authStatus: null,
                 loading: false
             }
-        case "ACTUALIZAR_CARRITO":
-            return {
-                ...globalState,
-                cart: action.payload
-            }
+            case "ACTUALIZAR_CARRITO":
+                console.log("ACTUALIZAR_CARRITO action called with payload:", action.payload);
+                return {
+                    ...globalState,
+                    cart: action.payload
+                };
         case "ESTABLECER_SESSION_URL":
             return {
                 ...globalState,

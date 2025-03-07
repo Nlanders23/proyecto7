@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import UserContext from '../../Context/Users/UserContext'
+import {Box, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Select, MenuItem, Button, Paper, Divider, Alert,} from '@mui/material';
 
 const Checkout = () => {
   const userCtx = useContext(UserContext);
@@ -8,6 +9,12 @@ const Checkout = () => {
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    console.log("UserContext in Checkout:", userCtx);
+    console.log("Cart in Checkout:", cart);
+    console.log("Cart from localStorage:", JSON.parse(localStorage.getItem('cart') || '[]'));
+  }, [userCtx, cart]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,8 +78,13 @@ const Checkout = () => {
     });
     editCart(updatedCart);
   };
+  
+  useEffect(() => {
+    console.log("Current cart:", cart);
+  }, [cart]);
 
   if (!cart || cart.length === 0) {
+    console.log("Cart is empty in render condition");
     return (
       <div className="max-w-4xl mx-4 py-8 md:mx-auto text-center">
         <h1 className="text-3xl font-bold mt-8">Carrito</h1>
@@ -88,111 +100,93 @@ const Checkout = () => {
 
   return (
     <>
-      <div className="max-w-4xl mx-4 py-8 md:mx-auto">
-        <h1 className="text-3xl font-bold mt-8">Carrito</h1>
+      <Box sx={{ maxWidth: '800px', mx: 'auto', p: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Carrito de Compras
+      </Typography>
 
-        <form className="mt-12">
-          <ul>
-            {cart.map((e) => {
-              return (
-                <li key={e.id || e.priceID} className="flex py-10">
-                  <figure>
-                    <img
-                      src={e.img}
-                      alt={e.name}
-                      className="checkout-figure-img"
-                    />
-                  </figure>
+      <List sx={{ width: '100%' }}>
+        {cart.map((e) => (
+          <ListItem key={e.id || e.priceID} alignItems="flex-start" sx={{ py: 3, borderBottom: '1px solid #eee' }}>
+            <ListItemAvatar>
+              <Avatar src={e.img} alt={e.name} sx={{ width: 60, height: 60 }} />
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <Link to={`/catalogo-de-productos/${e.slug || e.name}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
+                  {e.name}
+                </Link>
+              }
+              secondary={
+                <React.Fragment>
+                  <Typography variant="body2" color="text.secondary">
+                    {e.size || 'Estándar'}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                    <Select
+                      labelId={`quantity-${e.id || e.priceID}-label`}
+                      id={`quantity-${e.id || e.priceID}`}
+                      value={e.quantity}
+                      onChange={(evt) => handleChange(evt, e.priceID)}
+                      sx={{ mr: 2, height: 36 }}
+                    >
+                      {Array(5)
+                        .fill(null)
+                        .map((_, i) => {
+                          const initial = i + 1;
+                          return (
+                            <MenuItem key={initial} value={initial}>
+                              {initial}
+                            </MenuItem>
+                          );
+                        })}
+                    </Select>
+                    <Button
+                      variant="text"
+                      color="error"
+                      onClick={(evt) => handleRemove(evt, e.priceID)}
+                    >
+                      Eliminar
+                    </Button>
+                  </Box>
+                </React.Fragment>
+              }
+            />
+            <Typography variant="subtitle1" sx={{ ml: 2 }}>
+              ${((e.price / 100) * e.quantity).toFixed(2)}
+            </Typography>
+          </ListItem>
+        ))}
+      </List>
 
-                  <div className="relative ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                    <div className="flex justify-between sm:grid sm:grid-cols-2">
-                      <div className="pr-6">
-                        <h3 className="text-sm">
-                          <Link
-                            to={`/catalogo-de-productos/${e.slug || e.name}`}
-                            className="underline font-medium"
-                          >
-                            {e.name}
-                          </Link>
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500">{e.size || 'Estándar'}</p>
-                      </div>
+      <Paper elevation={2} sx={{ p: 3, mt: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Resumen del Pedido
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant="subtitle1">Total</Typography>
+          <Typography variant="subtitle1">${total.toFixed(2)}</Typography>
+        </Box>
+      </Paper>
 
-                      <p className="text-sm font-medium text-gray-900 text-right">
-                        ${((e.price / 100) * e.quantity).toFixed(2)}
-                      </p>
-                    </div>
+      {error && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-                    <div className="mt-4 flex items-center sm:block sm:absolute sm:top-0 sm:left-1/2 sm:mt-0">
-                      <select
-                        id={`quantity-${e.id || e.priceID}`}
-                        name={e.priceID}
-                        onChange={(e) => {
-                          handleChange(e);
-                        }}
-                        className="block border border-gray-300 px-2 py-1 text-sm"
-                      >
-                        {Array(5)
-                          .fill(null)
-                          .map((_, i) => {
-                            const initial = i + 1;
-
-                            return initial === e.quantity ? (
-                              <option key={initial} selected value={initial}>
-                                {initial}
-                              </option>
-                            ) : (
-                              <option key={initial} value={initial}>{initial}</option>
-                            );
-                          })}
-                      </select>
-
-                      <button
-                        type="button"
-                        onClick={(evt) => {
-                          handleRemove(evt, e.priceID);
-                        }}
-                        className="text-sm font-sm ml-4 md:ml-0 mt-2 text-brand-purple"
-                      >
-                        <span>Eliminar</span>
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-
-          <div className="bg-gray-100 px-4 py-6 sm:p-6 lg:p-8">
-            <div>
-              <dl className="-my-4 text-sm ">
-                <div className="py-4 flex items-center justify-between">
-                  <dt className="font-bold">Total</dt>
-                  <dd className="">$ {total.toFixed(2)}</dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-
-          {error && (
-            <div className="mt-4 p-3 bg-red-100 text-red-800 rounded">
-              {error}
-            </div>
-          )}
-
-          <div className="mt-10">
-            <button
-              onClick={(e) => {
-                handleSubmit(e);
-              }}
-              disabled={isLoading}
-              className={`form-button ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
-            >
-              {isLoading ? 'Procesando...' : 'Procesar pago'}
-            </button>
-          </div>
-        </form>
-      </div>
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ mt: 4 }}
+        onClick={handleSubmit}
+        disabled={isLoading}
+      >
+        {isLoading ? 'Procesando...' : 'Procesar Pago'}
+      </Button>
+    </Box>
     </>
   )
 }
