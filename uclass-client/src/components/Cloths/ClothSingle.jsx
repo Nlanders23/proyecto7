@@ -47,7 +47,7 @@ const ClothSingle = () => {
     } else {
       let sizeText = 'Talla única';
       if (cloth.sizes && cloth.sizes.length > 0) {
-        sizeText = cloth.sizes.map(s => s.size).join(', ');
+        sizeText = cloth.sizes.map(s => s.name).join(', ');
       } else if (cloth.size) {
         sizeText = cloth.size;
       }
@@ -132,7 +132,7 @@ const ClothSingle = () => {
                 {cloth.sizes.map((sizeObj, index) => (
                   <Chip
                     key={index}
-                    label={sizeObj.size}
+                    label={sizeObj.name}
                     variant="outlined"
                     sx={{
                       borderColor: '#1976d2',

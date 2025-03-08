@@ -42,7 +42,7 @@ const Checkout = () => {
       if (!cart || cart.length === 0) return 0;
 
       return cart.reduce((acc, cv) => {
-        const updateQuantity = (cv.price / 100) * cv.quantity;
+        const updateQuantity = cv.price  * cv.quantity;
         return updateQuantity + acc;
       }, 0);
     };
@@ -64,7 +64,7 @@ const Checkout = () => {
     const updatedCart = cart.map((item) => {
       return item.priceID === priceID
         ? {
-          ...elt,
+          ...item,
           quantity: newQuantity
         }
         : item;
@@ -137,6 +137,7 @@ const Checkout = () => {
                       labelId={`quantity-${e.id || e.priceID}-label`}
                       id={`quantity-${e.id || e.priceID}`}
                       value={e.quantity}
+                      name={e.priceID} 
                       onChange={(evt) => handleChange(evt, e.priceID)}
                       sx={{ mr: 2, height: 36 }}
                     >
@@ -163,7 +164,7 @@ const Checkout = () => {
               }
             />
             <Typography variant="subtitle1" sx={{ ml: 2 }}>
-              ${formatCLP((e.price / 100) * e.quantity)}
+              {formatCLP(e.price  * e.quantity)}
             </Typography>
           </ListItem>
         ))}
@@ -176,7 +177,7 @@ const Checkout = () => {
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
           <Typography variant="subtitle1">Total</Typography>
-          <Typography variant="subtitle1">${formatCLP(total)}</Typography>
+          <Typography variant="subtitle1">{formatCLP(total)}</Typography>
         </Box>
       </Paper>
 
