@@ -58,13 +58,16 @@ const Checkout = () => {
   const handleChange = (e) => {
     if (!cart || cart.length === 0) return;
 
-    const updatedCart = cart.map((elt) => {
-      return elt.priceID === e.target.name
+    const priceID = e.target.name;
+    const newQuantity = parseInt(e.target.value);
+
+    const updatedCart = cart.map((item) => {
+      return item.priceID === priceID
         ? {
           ...elt,
-          quantity: parseInt(e.target.value)
+          quantity: newQuantity
         }
-        : elt;
+        : item;
     });
     editCart(updatedCart);
   };
@@ -73,8 +76,8 @@ const Checkout = () => {
     e.preventDefault();
     if (!cart || cart.length === 0) return;
 
-    const updatedCart = cart.filter((elt) => {
-      return elt.priceID !== currentPriceID;
+    const updatedCart = cart.filter((item) => {
+      return item.priceID !== currentPriceID;
     });
     editCart(updatedCart);
   };
@@ -82,6 +85,13 @@ const Checkout = () => {
   useEffect(() => {
     console.log("Current cart:", cart);
   }, [cart]);
+
+  const formatCLP = (price) => {
+    return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+    }).format(price);
+  };
 
   if (!cart || cart.length === 0) {
     console.log("Cart is empty in render condition");
@@ -153,7 +163,7 @@ const Checkout = () => {
               }
             />
             <Typography variant="subtitle1" sx={{ ml: 2 }}>
-              ${((e.price / 100) * e.quantity).toFixed(2)}
+              ${formatCLP((e.price / 100) * e.quantity)}
             </Typography>
           </ListItem>
         ))}
@@ -166,7 +176,7 @@ const Checkout = () => {
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
           <Typography variant="subtitle1">Total</Typography>
-          <Typography variant="subtitle1">${total.toFixed(2)}</Typography>
+          <Typography variant="subtitle1">${formatCLP(total)}</Typography>
         </Box>
       </Paper>
 

@@ -45,21 +45,27 @@ const ClothSingle = () => {
       userCtx.editCart(updatedCart);
       console.log('Actualizar carro:', updatedCart)
     } else {
+      let sizeText = 'Talla única';
+      if (cloth.sizes && cloth.sizes.length > 0) {
+        sizeText = cloth.sizes.map(s => s.size).join(', ');
+      } else if (cloth.size) {
+        sizeText = cloth.size;
+      }
+
       const newItem = {
         id: cloth._id,
         priceID: cloth._id,
         name: cloth.name,
         price: cloth.price,
         img: cloth.img && cloth.img.length > 0 ? cloth.img[0] : '',
-        size: cloth.size && cloth.sizes.length > 0
-        ? cloth.sizes.map(s => s.name).join(',')
-        : 'Talla única',
+        size: sizeText,
         quantity: 1,
         slug: cloth.name.toLowerCase().replace(/ /g, '-')
       };
-      const newCart = [...cart, newItem];
-      userCtx.editCart(newCart);
-      console.log("New cart:", newCart);
+
+      const newCart = [...cart, newItem]
+      userCtx.editCart(newCart)
+      console.log('Nuevo item añadido', newItem)
     }
 
     navigate('/carrito')
