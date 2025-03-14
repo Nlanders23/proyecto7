@@ -15,6 +15,7 @@ import DetailCategory from './components/Cloths/DetailCategory'
 import Checkout from './components/Checkout/Checkout'
 import PrivateRoute from './routes/PrivateRoute'
 import AuthRoute from './routes/AuthRoute'
+import Successful from './components/Checkout/Successful'
 
 function App() {
 
@@ -34,6 +35,11 @@ function App() {
             <Route path='/carrito' element={
               <PrivateRoute>
                  <Checkout />
+              </PrivateRoute>
+             } />
+             <Route path='/compra-exitosa' element={
+              <PrivateRoute>
+                <Successful />
               </PrivateRoute>
              } />
 

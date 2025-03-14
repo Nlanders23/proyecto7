@@ -16,25 +16,29 @@ const Checkout = () => {
     console.log("Cart from localStorage:", JSON.parse(localStorage.getItem('cart') || '[]'));
   }, [userCtx, cart]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-
+  
     try {
-      getCheckoutSession();
+      console.log("Submitting cart for checkout:", cart);
+      await getCheckoutSession();
+      
+      
     } catch (error) {
-      setError("Error al procesar el pago. Inténtalo de nuevo.");
       console.error("Checkout error:", error);
+      setError(`Error al procesar el pago: ${error.message || "Inténtalo de nuevo."}`);
     } finally {
       setIsLoading(false);
     }
-
-
   };
 
   useEffect(() => {
-    if (sessionURL) window.location.href = sessionURL;
+    if (sessionURL) {
+      console.log("Redirecting to session URL:", sessionURL);
+      window.location.href = sessionURL;
+    }
   }, [sessionURL]);
 
   useEffect(() => {

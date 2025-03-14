@@ -106,16 +106,27 @@ const UserState = (props) => {
 
     const getCheckoutSession = async () => {
         try {
+            console.log("Creando checkout session with items:", globalState.cart);
             const res = await axiosClient.post('/carts/create-order', { 
                 items: globalState.cart 
             });
+
+            console.log("Checkout session response:", res.data);
+
+            if (res.data && res.data.url) {
+                dispatch({
+                    type: "ESTABLECER_SESSION_URL",
+                    payload: res.data.url
+                });
+                return res.data.url;
+            } else {
+                console.error("Invalid response format or missing URL:", res.data);
+                throw new Error("Invalid response from server");
+            }
             
-            dispatch({
-                type: "ESTABLECER_SESSION_URL",
-                payload: res.data.url
-            })
         } catch (error) {
             console.log("Error creating checkout session:", error);
+            throw error;
         }
     }
   return (
