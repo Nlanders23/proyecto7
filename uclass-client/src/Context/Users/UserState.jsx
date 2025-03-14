@@ -85,7 +85,7 @@ const UserState = (props) => {
             }
         }
 
-    const logout = () => { 
+     const logout = () => { 
        dispatch({
         type: "CERRAR_SESION"
        }) 
@@ -106,29 +106,34 @@ const UserState = (props) => {
 
     const getCheckoutSession = async () => {
         try {
-            console.log("Creando checkout session with items:", globalState.cart);
-            const res = await axiosClient.post('/carts/create-order', { 
-                items: globalState.cart 
+          console.log("Creando checkout session with items:", globalState.cart);
+          const res = await axiosClient.post('/carts/create-order', { 
+            items: globalState.cart 
+          });
+      
+          console.log("Checkout session response:", res.data);
+      
+          if (res.data && res.data.url) {
+            dispatch({
+              type: "ESTABLECER_SESSION_URL",
+              payload: res.data.url
             });
-
-            console.log("Checkout session response:", res.data);
-
-            if (res.data && res.data.url) {
-                dispatch({
-                    type: "ESTABLECER_SESSION_URL",
-                    payload: res.data.url
-                });
-                return res.data.url;
-            } else {
-                console.error("Invalid response format or missing URL:", res.data);
-                throw new Error("Invalid response from server");
-            }
-            
+            return res.data.url;
+          } else {
+            console.error("Invalid response format or missing URL:", res.data);
+            throw new Error("Invalid response from server");
+          }
+          
         } catch (error) {
-            console.log("Error creating checkout session:", error);
-            throw error;
+          console.log("Error creating checkout session:", error);
+          if (error.response) {
+            console.log("Error response data:", error.response.data);
+            console.log("Error response status:", error.response.status);
+          }
+          throw error;
         }
     }
+    
   return (
     <UserContext.Provider value={{
         user: globalState.user,
