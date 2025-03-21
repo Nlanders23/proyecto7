@@ -83,44 +83,45 @@ const Home = () => {
   }, [currentIndex]);
 
   const navigate = useNavigate();
-  const handleClick =() => {
+  const handleClick = () => {
     navigate('/catalogo-de-productos')
   }
-
-  
   
   return (
     <>
-        <div className="home-container">
-      {/* Hero Slider */}
-      <div className="slider-container">
-        <div 
-          className={`slider-image ${isTransitioning ? 'fade-out' : 'fade-in'}`}
-          style={{ backgroundImage: `url(${sliderImages[currentIndex].url})` }}
-        >
-          <div className="slider-content">
-            <h2>{sliderImages[currentIndex].title}</h2>
-            <p>{sliderImages[currentIndex].subtitle}</p>
-            <button className="shop-now-btn" onClick={handleClick}>COMPRAR AHORA</button>
+      <div className="home-container">
+        {/* Hero Slider */}
+        <div className="slider-container">
+          {sliderImages.map((slide, index) => (
+            <div 
+              key={slide.id}
+              className={`slider-image ${index === currentIndex ? (isTransitioning ? 'fade-out' : 'fade-in') : 'fade-out'}`}
+              style={{ backgroundImage: `url(${slide.url})`, display: index === currentIndex ? 'flex' : 'none' }}
+            >
+              <div className="slider-content">
+                <h2>{slide.title}</h2>
+                <p>{slide.subtitle}</p>
+                <button className="shop-now-btn" onClick={handleClick}>COMPRAR AHORA</button>
+              </div>
+            </div>
+          ))}
+
+          {/* Controles del slider */}
+          <button className="slider-control prev-btn" onClick={prevSlide}>&#10094;</button>
+          <button className="slider-control next-btn" onClick={nextSlide}>&#10095;</button>
+          
+          {/* Indicadores */}
+          <div className="slider-indicators">
+            {sliderImages.map((_, index) => (
+              <button 
+                key={index} 
+                className={`indicator ${index === currentIndex ? 'active' : ''}`}
+                onClick={() => goToSlide(index)}
+              />
+            ))}
           </div>
         </div>
-
-        {/* Controles del slider */}
-        <button className="slider-control prev-btn" onClick={prevSlide}>&#10094;</button>
-        <button className="slider-control next-btn" onClick={nextSlide}>&#10095;</button>
-        
-        {/* Indicadores */}
-        <div className="slider-indicators">
-          {sliderImages.map((_, index) => (
-            <button 
-              key={index} 
-              className={`indicator ${index === currentIndex ? 'active' : ''}`}
-              onClick={() => goToSlide(index)}
-            />
-          ))}
-        </div>
       </div>
-    </div>
     </>
   )
 }

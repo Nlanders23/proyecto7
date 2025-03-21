@@ -31,20 +31,28 @@ const UserReducer = (globalState, action) => {
             localStorage.removeItem('token');
             return {
                 ...globalState,
-                user: null,
-                authStatus: null,
+                user: {
+                    username: null,
+                    email: null
+                },
+                authStatus: false,
                 loading: false
             }
-            case "ACTUALIZAR_CARRITO":
-                console.log("ACTUALIZAR_CARRITO action called with payload:", action.payload);
-                return {
-                    ...globalState,
-                    cart: action.payload
-                };
+        case "ACTUALIZAR_CARRITO":
+            console.log("ACTUALIZAR_CARRITO action called with payload:", action.payload);
+            return {
+                ...globalState,
+                cart: action.payload
+            };
         case "ESTABLECER_SESSION_URL":
             return {
                 ...globalState,
                 sessionURL: action.payload
+            };
+        case "ESTABLECER_CHECKOUT_STATUS":
+            return {
+                ...globalState,
+                checkoutStatus: action.payload
             }
         default:
             return globalState;

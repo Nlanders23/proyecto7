@@ -21,7 +21,8 @@ const UserState = (props) => {
         authStatus: false,
         loading: true,
         cart: parsedCart,
-        sessionURL: null
+        sessionURL: null,
+        checkoutStatus: null
     }
     console.log("Initial state in UserState:", initialState);
 
@@ -34,9 +35,11 @@ const UserState = (props) => {
             dispatch({
                 type: "REGISTRO_EXITOSO",
                 payload: token
-            })
+            });
+            return res;
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            throw error;
         }
     }
 
@@ -86,6 +89,7 @@ const UserState = (props) => {
         }
 
      const logout = () => { 
+        localStorage.removeItem('cart');
        dispatch({
         type: "CERRAR_SESION"
        }) 
@@ -107,6 +111,13 @@ const UserState = (props) => {
         })
     }
 
+    const setCheckoutStatus = (status) => {
+        dispatch({
+            type: 'ESTABLECER_CHECKOUT_STATUS',
+            payload: status
+        });
+    }
+
     const getCheckoutSession = async () => {
         try {
           console.log("Creando checkout session with items:", globalState.cart);
@@ -122,13 +133,20 @@ const UserState = (props) => {
           console.log("Checkout session response:", res.data);
       
           if (res.data && res.data.url) {
+            if (res.data.url.includes('canceled') || res.data.url.includes('cancel')) {
+                setCheckoutStatus('canceled');
+                return '/compra-cancelada';
+            }
+
             dispatch({
               type: "ESTABLECER_SESSION_URL",
               payload: res.data.url
             });
+            setCheckoutStatus('pending');
             return res.data.url;
           } else {
             console.log("No URL returned, simulating success");
+            setCheckoutStatus('success');
              return '/compra-exitosa';
           }
           
@@ -138,10 +156,16 @@ const UserState = (props) => {
             console.log("Error response data:", error.response.data);
             console.log("Error response status:", error.response.status);
           }
-          throw error;
+          setCheckoutStatus('canceled');
+          return '/compra-cancelada';
         }
     }
-    
+
+    const handleCancelCheckout = () => {
+        setCheckoutStatus('canceled');
+        return '/compra-cancelada';
+    }
+
   return (
     <UserContext.Provider value={{
         user: globalState.user,
@@ -154,7 +178,9 @@ const UserState = (props) => {
         verifyingToken,
         logout,
         editCart,
-        getCheckoutSession
+        getCheckoutSession,
+        handleCancelCheckout,
+        setCheckoutStatus
     }}>
         {props.children}
     </UserContext.Provider>

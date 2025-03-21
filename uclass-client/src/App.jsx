@@ -16,6 +16,7 @@ import Checkout from './components/Checkout/Checkout'
 import PrivateRoute from './routes/PrivateRoute'
 import AuthRoute from './routes/AuthRoute'
 import Successful from './components/Checkout/Successful'
+import Canceled from './components/Checkout/Canceled'
 
 function App() {
 
@@ -26,41 +27,46 @@ function App() {
           <Header />
           <Routes>
             {/* {RUTAS PRIVADAS} */}
-            
+
             <Route path='/perfil' element={
               <PrivateRoute>
                 <Profile />
               </PrivateRoute>
-               }/>
+            } />
             <Route path='/carrito' element={
               <PrivateRoute>
-                 <Checkout />
+                <Checkout />
               </PrivateRoute>
-             } />
-             <Route path='/compra-exitosa' element={
+            } />
+            <Route path='/compra-exitosa' element={
               <PrivateRoute>
                 <Successful />
               </PrivateRoute>
-             } />
+            } />
+            <Route path='/compra-cancelada' element={
+              <PrivateRoute>
+                <Canceled />
+              </PrivateRoute>
+            } />
 
             {/* {RUTAS DE AUTENTICACIÓN} */}
             <Route path='/registro' element={
               <AuthRoute>
                 <Register />
               </AuthRoute>
-              } />
+            } />
             <Route path='/iniciar-sesion' element={
               <AuthRoute>
                 <Login />
               </AuthRoute>
-              } />
+            } />
             { /*RUTAS PÚBLICAS */}
             <Route path='/' element={<Home />} />
             <Route path='/catalogo-de-productos' element={<ClothList />} />
             <Route path='/categoria' element={<Category />} />
-            <Route path='/catalogo-de-productos/:name' element={<ClothSingle />}/>
-            <Route path='/categoria/:category' element={<DetailCategory />}/>
-            <Route path='/categoria/:category/:name' element={<ClothSingle />}/>
+            <Route path='/catalogo-de-productos/:name' element={<ClothSingle />} />
+            <Route path='/categoria/:category' element={<DetailCategory />} />
+            <Route path='/categoria/:category/:name' element={<ClothSingle />} />
           </Routes>
           <Footer />
         </Router>

@@ -30,7 +30,7 @@ const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
-
+    
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -58,6 +58,7 @@ const Header = () => {
       logout();
       navigate('/');
       handleCloseUserMenu();
+      window.location.href = '/'
     }}
   ]
    : [ 
