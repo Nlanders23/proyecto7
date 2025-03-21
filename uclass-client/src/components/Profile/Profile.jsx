@@ -95,10 +95,10 @@ const Profile = () => {
 
   return (
     <>
-    <Container maxWidth="lg" sx={{ py: 4, backgroundColor: '#dce3f1', minHeight: '80vh' }}>
-      <Grid2 container spacing={3}>
+    <Container disableGutters maxWidth="false" sx={{ py: 4, backgroundColor: '#dce3f1', minHeight: '80vh' }}>
+      <Grid2 container justifyContent="center">
         <Grid2 item xs={12} md={4}>
-        <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <Avatar 
             alt={user?.username || 'Usuario'} 
             src="/static/images/avatar/1.jpg" 

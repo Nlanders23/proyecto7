@@ -73,7 +73,7 @@ const ClothSingle = () => {
   
 
   return (
-    <Container maxWidth="lg" className='detalles' sx={{ padding: '80px 20px', backgroundColor: '#dce3f1' }}>
+    <Container disableGutters maxWidth="false" className='detalles' sx={{ padding: '80px 20px', backgroundColor: '#dce3f1' }}>
       <Box sx={{
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },

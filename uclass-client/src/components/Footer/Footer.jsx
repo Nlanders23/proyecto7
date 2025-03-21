@@ -83,7 +83,7 @@ const Footer = () => {
                     {/* Columna 2: Beneficios */}
                     <Grid2 item xs={12} md={8}>
                         <Grid2 container spacing={2}>
-                            <Grid2 item xs={6} sm={3}>
+                            <Grid2 item xs={12} sm={3}>
                                 <BenefitItem>
                                     <ShippingIcon sx={{ fontSize: 36, mb: 1, color:'white' }} />
                                     <Typography variant="subtitle1" fontWeight="bold" color='white'>
@@ -94,7 +94,7 @@ const Footer = () => {
                                     </Typography>
                                 </BenefitItem>
                             </Grid2>
-                            <Grid2 item xs={6} sm={3}>
+                            <Grid2 item xs={12} sm={3}>
                                 <BenefitItem>
                                     <ReturnIcon sx={{ fontSize: 36, mb: 1, color:'white' }} />
                                     <Typography variant="subtitle1" fontWeight="bold" color='white'>
@@ -105,7 +105,7 @@ const Footer = () => {
                                     </Typography>
                                 </BenefitItem>
                             </Grid2>
-                            <Grid2 item xs={6} sm={3}>
+                            <Grid2 item xs={12} sm={3}>
                                 <BenefitItem>
                                     <SupportIcon sx={{ fontSize: 36, mb: 1, color:'white' }} />
                                     <Typography variant="subtitle1" fontWeight="bold" color='white'>
@@ -116,7 +116,7 @@ const Footer = () => {
                                     </Typography>
                                 </BenefitItem>
                             </Grid2>
-                            <Grid2 item xs={6} sm={3}>
+                            <Grid2 item xs={12} sm={3}>
                                 <BenefitItem>
                                     <SecurityIcon sx={{ fontSize: 36, mb: 1, color:'white' }} />
                                     <Typography variant="subtitle1" fontWeight="bold" color='white'>

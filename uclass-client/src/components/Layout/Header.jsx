@@ -14,6 +14,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from 'react-router-dom'
 import UserContext from '../../Context/Users/UserContext';
+import { Badge } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 
 const pages = [
@@ -46,16 +48,22 @@ const Header = () => {
 
   const ctx = useContext(UserContext);
 
-  const {logout, user} = ctx
+  const {logout, user, authStatus, cart = []} = ctx
 
-  const settings = [
-    {name: 'PERFIL', path: '/perfil'},
-    {name: 'INICIAR SESION', path: '/iniciar-sesion'},
-    {name: 'REGISTRARME', path: '/registro'},
+  const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0)
+
+  const settings = authStatus
+  ? [{name: 'PERFIL', path: '/perfil'},
     {name: 'CERRAR SESION', onClick: () => {
       logout();
       navigate('/');
+      handleCloseUserMenu();
     }}
+  ]
+   : [ 
+    {name: 'INICIAR SESION', path: '/iniciar-sesion'},
+    {name: 'REGISTRARME', path: '/registro'},
+    
   ];
 
   return (
@@ -147,6 +155,23 @@ const Header = () => {
               </Button>
             ))}
           </Box>
+
+            {authStatus && (
+              <Box sx={{ mx: 2 }}>
+              <Tooltip title="Ver carrito">
+                <IconButton 
+                  component={Link} 
+                  to="/carrito" 
+                  sx={{ color: 'white' }}
+                >
+                  <Badge badgeContent={cartItemCount} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+            </Box>
+            )}
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
